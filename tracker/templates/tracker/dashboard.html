@@ -1,0 +1,183 @@
+{% extends "tracker/base.html" %}
+
+{% block title %}Dashboard &middot; Kosten{% endblock %}
+
+{% block sidebar %}
+<div class="balance-card">
+    <div class="balance-card-icon">&#128176;</div>
+    <span class="balance-label">Current Balance</span>
+    <span class="balance-value">${{ total_balance|floatformat:2 }}</span>
+    <span class="balance-sub">Total Expense</span>
+</div>
+
+<div class="mini-card-block">
+    <div class="mini-card-header">
+        <span>This Month</span>
+        <a href="/admin/tracker/transaction/add/">+ Add</a>
+    </div>
+    <div class="visa-card">
+        <div class="visa-card-top">
+            <span class="visa-flag">&#9679;</span>
+            <span>Income</span>
+        </div>
+        <span class="visa-amount">${{ month_income|floatformat:2 }}</span>
+        <div class="visa-card-bottom">
+            <span class="visa-chip"></span>
+            <span class="visa-brand">KOSTEN</span>
+        </div>
+    </div>
+</div>
+
+<div class="activity-block">
+    <span class="activity-heading">Latest Activity</span>
+
+    {% if today_activity %}
+    <span class="activity-group-label">Today</span>
+    {% for tx in today_activity %}
+    <div class="activity-row">
+        <span class="activity-dot" style="background:{{ tx.color }}"></span>
+        <div class="activity-text">
+            <span class="activity-title">{{ tx.category }}</span>
+            <span class="activity-sub">{{ tx.description|default:"Transaction Successful" }}</span>
+        </div>
+        <span class="activity-amount {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
+            {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:0 }}
+        </span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if yesterday_activity %}
+    <span class="activity-group-label">Yesterday</span>
+    {% for tx in yesterday_activity %}
+    <div class="activity-row">
+        <span class="activity-dot" style="background:{{ tx.color }}"></span>
+        <div class="activity-text">
+            <span class="activity-title">{{ tx.category }}</span>
+            <span class="activity-sub">{{ tx.description|default:"Transaction Successful" }}</span>
+        </div>
+        <span class="activity-amount {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
+            {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:0 }}
+        </span>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if not today_activity and not yesterday_activity %}
+    <p class="empty-state">Nothing logged today or yesterday yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row-top">
+    <section class="panel panel-chart">
+        <div class="panel-header">
+            <h2>This Week Spend</h2>
+            <div class="panel-header-stat">
+                <span class="stat-label">Total Spend</span>
+                <span class="stat-value">${{ week_total|floatformat:0 }}</span>
+            </div>
+        </div>
+        <div class="bar-chart">
+            {% for day in daily_spend %}
+            <div class="bar-col">
+                <div class="bar" style="height: {{ day.pct }}%; background: {{ day.color }};"></div>
+                <span class="bar-label">{{ day.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="panel panel-accent">
+        <span class="panel-accent-label">Top Category</span>
+        {% if top_category %}
+        <span class="panel-accent-name">{{ top_category.category__name|default:"Uncategorized" }}</span>
+        <span class="panel-accent-amount">${{ top_category.total|floatformat:2 }}</span>
+        <span class="panel-accent-sub">spent this month</span>
+        {% else %}
+        <span class="panel-accent-name">No spending yet</span>
+        <span class="panel-accent-sub">Log an expense to see it here</span>
+        {% endif %}
+        <a href="/admin/tracker/transaction/" class="btn-outline">View All</a>
+    </section>
+
+    <section class="panel panel-quick">
+        <div class="panel-header">
+            <h2>Quick Actions</h2>
+        </div>
+        <div class="quick-grid">
+            {% for action in quick_actions %}
+            <a href="/admin/tracker/transaction/add/" class="quick-item">
+                <span class="quick-icon" style="background: {{ action.color }};">{{ action.icon }}</span>
+                <span>{{ action.label }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<div class="row-stats">
+    <section class="stat-card">
+        <span class="stat-card-label">Spend this week</span>
+        <span class="stat-card-value">${{ week_total|floatformat:0 }}</span>
+        {% if trend_pct is not None %}
+        <span class="stat-card-trend {% if trend_pct > 0 %}trend-up{% else %}trend-down{% endif %}">
+            {% if trend_pct > 0 %}&#9650;{% else %}&#9660;{% endif %} {{ trend_pct }}%
+        </span>
+        {% endif %}
+    </section>
+
+    <section class="stat-card">
+        <span class="stat-card-label">Total Savings</span>
+        <span class="stat-card-value">${{ total_savings|floatformat:0 }}</span>
+        <span class="stat-card-sub">under budget this month</span>
+    </section>
+
+    <section class="stat-card">
+        <span class="stat-card-label">Spending Trend</span>
+        <svg class="sparkline" viewBox="0 0 100 28" preserveAspectRatio="none">
+            <polyline points="{{ sparkline_points }}" fill="none" stroke="#8C6FF7" stroke-width="2.5" />
+        </svg>
+        {% if trend_pct is not None %}
+        <span class="stat-card-sub">{{ trend_pct }}% vs last week</span>
+        {% endif %}
+    </section>
+</div>
+
+<section class="panel panel-table">
+    <div class="panel-header">
+        <h2>Last Month Activities</h2>
+        <a href="/admin/tracker/transaction/" class="panel-action">View All</a>
+    </div>
+    {% if activities %}
+    <table class="activities-table">
+        <thead>
+            <tr>
+                <th>Categories Names</th>
+                <th>Transactions</th>
+                <th>Date</th>
+                <th class="align-right">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in activities %}
+            <tr>
+                <td>
+                    <span class="row-dot" style="background:{{ tx.color }}"></span>
+                    {{ tx.category }}
+                </td>
+                <td><span class="status-pill">Successful</span></td>
+                <td>{{ tx.date|date:"d/m/Y" }}</td>
+                <td class="align-right {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
+                    {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:2 }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">No transactions in the last 30 days &mdash; add some from the <a href="/admin/">admin panel</a>.</p>
+    {% endif %}
+</section>
+{% endblock %}

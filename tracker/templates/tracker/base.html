@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kosten &middot; Personal Finance Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'tracker/css/style.css' %}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="icon-rail">
+            <div class="rail-logo">K</div>
+            <nav class="rail-nav">
+                <a href="{% url 'tracker:dashboard' %}" class="rail-icon active" title="Dashboard">&#9638;</a>
+                <a href="#" class="rail-icon" title="Transactions">&#8646;</a>
+                <a href="#" class="rail-icon" title="Budgets">&#9673;</a>
+                <a href="#" class="rail-icon" title="Reports">&#9776;</a>
+            </nav>
+            <a href="{% url 'tracker:about' %}" class="rail-icon" title="About">?</a>
+            <a href="/admin/" class="rail-icon rail-icon-bottom" title="Admin">&#9881;</a>
+        </aside>
+
+        <aside class="profile-col">
+            <div class="brand">
+                <h1>K&ouml;sten</h1>
+                <p>Expense Manager</p>
+            </div>
+
+            {% block sidebar %}{% endblock %}
+        </aside>
+
+        <div class="main-col">
+            <header class="topbar">
+                <div class="search-box">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" placeholder="Search Expense" disabled>
+                </div>
+                <div class="topbar-actions">
+                    <a href="/admin/tracker/transaction/add/" class="btn-add">+ Add Expense</a>
+                    <span class="icon-btn" title="Notifications">&#128276;</span>
+                    <span class="icon-btn" title="Messages">&#128172;</span>
+                    <span class="user-chip">
+                        <span class="user-avatar">K</span>
+                    </span>
+                </div>
+            </header>
+
+            <main class="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

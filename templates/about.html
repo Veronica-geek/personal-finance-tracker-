@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About &middot; Kosten</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #F6F5FA;
+            color: #241F3D;
+            padding: 48px 24px;
+        }
+        .about-card {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(36, 31, 61, 0.08);
+            padding: 36px 40px;
+        }
+        h1 { margin-top: 0; }
+        h2 { font-size: 15px; color: #8C6FF7; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+        p { line-height: 1.5; }
+        .back-link { display: inline-block; margin-top: 24px; color: #F5A623; font-weight: 600; text-decoration: none; }
+        .note {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #8A88A3;
+            border-top: 1px solid #ECE6D8;
+            padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="about-card">
+        <h1>About Kosten</h1>
+        <p>A personal finance tracker that helps you log income and expenses, organize them by
+        category, and stay on top of a monthly budget &mdash; built as a semester-long Django project.</p>
+
+        <h2>Problem</h2>
+        <p>People lose track of where their money goes &mdash; there's no simple way to log spending,
+        group it by category, and see whether they're staying within a budget.</p>
+
+        <h2>Who uses it</h2>
+        <p>Individuals managing their own personal finances.</p>
+
+        <h2>What it does</h2>
+        <p>Register and log in, record income and expenses, categorize transactions, set a
+        monthly budget per category, view spending summaries, and (once the API phase is
+        built) access the data through a REST API.</p>
+
+        <a href="{% url 'tracker:dashboard' %}" class="back-link">&larr; Back to Dashboard</a>
+
+        <p class="note">
+            This page lives in the <strong>project-level</strong> templates folder
+            (<code>templates/about.html</code>), separate from the app-level templates in
+            <code>tracker/templates/tracker/</code> &mdash; both are wired up and working.
+        </p>
+    </div>
+</body>
+</html>
