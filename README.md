@@ -15,6 +15,40 @@ don't add them yet, that's next month's work.
 - `tracker/static/tracker/css/style.css` — all the styling, one file, easy to tweak
 - `db.sqlite3` — a small SQLite database, pre-seeded with a few sample transactions
   and budgets so the dashboard has something to show immediately
+- `templates/about.html` — a **project-level** template (separate from the
+  app-level ones in `tracker/templates/tracker/`), rendered by the `about`
+  view at `/about/` — this pair satisfies the practical's "both template
+  locations configured and tested" checkpoint
+- `.gitignore` — excludes `venv/`, `__pycache__/`, `db.sqlite3`, `.env`, etc.
+- `.git/` — this zip includes the initialized repo with its first commit
+  already made, so you can push it straight to GitHub without re-running
+  `git init`
+
+## Finishing Assignment 1: push to GitHub
+
+Everything up to the commit is done for you. GitHub needs **your own account**
+though, so this last part is on you — it's quick:
+
+```bash
+# 1. Unzip this project and cd into it
+cd personal-finance-tracker
+
+# 2. Confirm the commit is already there
+git log --oneline
+#   -> should show: "Initial commit: Django project setup, URLs, views, and templates"
+
+# 3. Create a new EMPTY repository on github.com (no README, no .gitignore,
+#    no license — just the bare repo), then copy its URL and run:
+git remote add origin https://github.com/<your-username>/<repo-name>.git
+git branch -M main
+git push -u origin main
+```
+
+Then double check the GitHub Checkpoint from the practical: the repo is
+accessible, `expense_tracker/` and `tracker/` are both there, `manage.py` and
+`.gitignore` are present, and `venv/`/`db.sqlite3` are **not** in the repo
+(GitHub's file list won't show them — that's correct, not a mistake).
+Submit that repository link.
 
 ## Running it on your own machine
 
