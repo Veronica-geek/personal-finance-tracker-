@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Veronica{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'tracker/css/style.css' %}">
+</head>
+<body class="auth-body">
+    <main class="auth-wrap">
+        <div class="auth-logo">V</div>
+        <h1>Veronica</h1>
+        <p class="auth-sub">Personal Finance Tracker</p>
+        <section class="form-card auth-card">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</body>
+</html>

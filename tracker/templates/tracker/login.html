@@ -1,0 +1,20 @@
+{% extends "tracker/auth_base.html" %}
+{% block title %}Log in &middot; Veronica{% endblock %}
+
+{% block content %}
+<h2>Log in</h2>
+<form method="post" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    <div class="form-row">
+        {{ field.label_tag }}
+        {{ field }}
+        {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn-add">Log in</button>
+</form>
+<p class="auth-alt">New here? <a href="{% url 'tracker:signup' %}">Create an account</a></p>
+{% endblock %}

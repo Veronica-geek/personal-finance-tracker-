@@ -1,0 +1,22 @@
+{% extends "tracker/base.html" %}
+{% block title %}{{ title }} &middot; Veronica{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <h2>{{ title }}</h2>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class="form-row">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-add">Save</button>
+        <a href="{% url 'tracker:dashboard' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

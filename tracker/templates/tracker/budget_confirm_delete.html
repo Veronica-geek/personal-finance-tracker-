@@ -1,0 +1,14 @@
+{% extends "tracker/base.html" %}
+{% block title %}Delete budget &middot; Veronica{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <h2>Delete this budget?</h2>
+    <p>{{ budget.category }} &middot; ${{ budget.monthly_limit }} per month</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-add">Yes, delete</button>
+        <a href="{% url 'tracker:budget_list' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

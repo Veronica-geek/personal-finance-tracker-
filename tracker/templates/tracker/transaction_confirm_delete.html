@@ -1,0 +1,14 @@
+{% extends "tracker/base.html" %}
+{% block title %}Delete transaction &middot; Veronica{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <h2>Delete this transaction?</h2>
+    <p>{{ transaction.date|date:"d M Y" }} &middot; {{ transaction.category|default:"Uncategorized" }} &middot; ${{ transaction.amount }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-add">Yes, delete</button>
+        <a href="{% url 'tracker:transaction_list' %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}

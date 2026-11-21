@@ -1,6 +1,6 @@
 {% extends "tracker/base.html" %}
 
-{% block title %}Dashboard &middot; Kosten{% endblock %}
+{% block title %}Dashboard &middot; Veronica{% endblock %}
 
 {% block sidebar %}
 <div class="balance-card">
@@ -13,7 +13,7 @@
 <div class="mini-card-block">
     <div class="mini-card-header">
         <span>This Month</span>
-        <a href="/admin/tracker/transaction/add/">+ Add</a>
+        <a href="{% url 'tracker:add_transaction' %}">+ Add</a>
     </div>
     <div class="visa-card">
         <div class="visa-card-top">
@@ -23,7 +23,7 @@
         <span class="visa-amount">${{ month_income|floatformat:2 }}</span>
         <div class="visa-card-bottom">
             <span class="visa-chip"></span>
-            <span class="visa-brand">KOSTEN</span>
+            <span class="visa-brand">Veronica</span>
         </div>
     </div>
 </div>
@@ -99,7 +99,7 @@
         <span class="panel-accent-name">No spending yet</span>
         <span class="panel-accent-sub">Log an expense to see it here</span>
         {% endif %}
-        <a href="/admin/tracker/transaction/" class="btn-outline">View All</a>
+        <a href="{% url 'tracker:transaction_list' %}" class="btn-outline">View All</a>
     </section>
 
     <section class="panel panel-quick">
@@ -108,7 +108,7 @@
         </div>
         <div class="quick-grid">
             {% for action in quick_actions %}
-            <a href="/admin/tracker/transaction/add/" class="quick-item">
+            <a href="{% url 'tracker:add_transaction' %}" class="quick-item">
                 <span class="quick-icon" style="background: {{ action.color }};">{{ action.icon }}</span>
                 <span>{{ action.label }}</span>
             </a>
@@ -148,7 +148,7 @@
 <section class="panel panel-table">
     <div class="panel-header">
         <h2>Last Month Activities</h2>
-        <a href="/admin/tracker/transaction/" class="panel-action">View All</a>
+        <a href="{% url 'tracker:transaction_list' %}" class="panel-action">View All</a>
     </div>
     {% if activities %}
     <table class="activities-table">
@@ -177,7 +177,7 @@
         </tbody>
     </table>
     {% else %}
-    <p class="empty-state">No transactions in the last 30 days &mdash; add some from the <a href="/admin/">admin panel</a>.</p>
+    <p class="empty-state">No transactions in the last 30 days &mdash; add some with <a href="{% url 'tracker:add_transaction' %}">Add Expense</a>.</p>
     {% endif %}
 </section>
 {% endblock %}
