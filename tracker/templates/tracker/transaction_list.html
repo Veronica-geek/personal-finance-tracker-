@@ -25,7 +25,7 @@
                 <td>{{ tx.category|default:"Uncategorized" }}</td>
                 <td>{{ tx.description }}</td>
                 <td class="{% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
-                    {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount }}
+                    {% if tx.type == 'income' %}+{% else %}-{% endif %}Ksh{{ tx.amount }}
                 </td>
                 <td>
                     <a href="{% url 'tracker:edit_transaction' tx.pk %}">Edit</a>

@@ -4,7 +4,7 @@
 {% block content %}
 <section class="form-card">
     <h2>Delete this transaction?</h2>
-    <p>{{ transaction.date|date:"d M Y" }} &middot; {{ transaction.category|default:"Uncategorized" }} &middot; ${{ transaction.amount }}</p>
+    <p>{{ transaction.date|date:"d M Y" }} &middot; {{ transaction.category|default:"Uncategorized" }} &middot; Ksh{{ transaction.amount }}</p>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn-add">Yes, delete</button>

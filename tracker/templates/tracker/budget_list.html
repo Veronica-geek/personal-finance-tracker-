@@ -17,9 +17,9 @@
         {% for b in budgets %}
             <tr>
                 <td>{{ b.category }}</td>
-                <td>${{ b.monthly_limit }}</td>
-                <td>${{ b.spent_this_month }}</td>
-                <td class="{% if b.remaining < 0 %}amount-expense{% else %}amount-income{% endif %}">${{ b.remaining }}</td>
+                <td>Ksh{{ b.monthly_limit }}</td>
+                <td>Ksh{{ b.spent_this_month }}</td>
+                <td class="{% if b.remaining < 0 %}amount-expense{% else %}amount-income{% endif %}">Ksh{{ b.remaining }}</td>
                 <td><progress max="100" value="{{ b.percent_used }}"></progress> {{ b.percent_used }}%</td>
                 <td>
                     <a href="{% url 'tracker:edit_budget' b.pk %}">Edit</a>

@@ -6,7 +6,7 @@
 <div class="balance-card">
     <div class="balance-card-icon">&#128176;</div>
     <span class="balance-label">Current Balance</span>
-    <span class="balance-value">${{ total_balance|floatformat:2 }}</span>
+    <span class="balance-value">Ksh{{ total_balance|floatformat:2 }}</span>
     <span class="balance-sub">Total Expense</span>
 </div>
 
@@ -20,7 +20,7 @@
             <span class="visa-flag">&#9679;</span>
             <span>Income</span>
         </div>
-        <span class="visa-amount">${{ month_income|floatformat:2 }}</span>
+        <span class="visa-amount">Ksh{{ month_income|floatformat:2 }}</span>
         <div class="visa-card-bottom">
             <span class="visa-chip"></span>
             <span class="visa-brand">Veronica</span>
@@ -41,7 +41,7 @@
             <span class="activity-sub">{{ tx.description|default:"Transaction Successful" }}</span>
         </div>
         <span class="activity-amount {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
-            {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:0 }}
+            {% if tx.type == 'income' %}+{% else %}-{% endif %}Ksh{{ tx.amount|floatformat:0 }}
         </span>
     </div>
     {% endfor %}
@@ -57,7 +57,7 @@
             <span class="activity-sub">{{ tx.description|default:"Transaction Successful" }}</span>
         </div>
         <span class="activity-amount {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
-            {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:0 }}
+            {% if tx.type == 'income' %}+{% else %}-{% endif %}Ksh{{ tx.amount|floatformat:0 }}
         </span>
     </div>
     {% endfor %}
@@ -76,7 +76,7 @@
             <h2>This Week Spend</h2>
             <div class="panel-header-stat">
                 <span class="stat-label">Total Spend</span>
-                <span class="stat-value">${{ week_total|floatformat:0 }}</span>
+                <span class="stat-value">Ksh{{ week_total|floatformat:0 }}</span>
             </div>
         </div>
         <div class="bar-chart">
@@ -93,7 +93,7 @@
         <span class="panel-accent-label">Top Category</span>
         {% if top_category %}
         <span class="panel-accent-name">{{ top_category.category__name|default:"Uncategorized" }}</span>
-        <span class="panel-accent-amount">${{ top_category.total|floatformat:2 }}</span>
+        <span class="panel-accent-amount">Ksh{{ top_category.total|floatformat:2 }}</span>
         <span class="panel-accent-sub">spent this month</span>
         {% else %}
         <span class="panel-accent-name">No spending yet</span>
@@ -120,7 +120,7 @@
 <div class="row-stats">
     <section class="stat-card">
         <span class="stat-card-label">Spend this week</span>
-        <span class="stat-card-value">${{ week_total|floatformat:0 }}</span>
+        <span class="stat-card-value">Ksh{{ week_total|floatformat:0 }}</span>
         {% if trend_pct is not None %}
         <span class="stat-card-trend {% if trend_pct > 0 %}trend-up{% else %}trend-down{% endif %}">
             {% if trend_pct > 0 %}&#9650;{% else %}&#9660;{% endif %} {{ trend_pct }}%
@@ -130,7 +130,7 @@
 
     <section class="stat-card">
         <span class="stat-card-label">Total Savings</span>
-        <span class="stat-card-value">${{ total_savings|floatformat:0 }}</span>
+        <span class="stat-card-value">Ksh{{ total_savings|floatformat:0 }}</span>
         <span class="stat-card-sub">under budget this month</span>
     </section>
 
@@ -170,7 +170,7 @@
                 <td><span class="status-pill">Successful</span></td>
                 <td>{{ tx.date|date:"d/m/Y" }}</td>
                 <td class="align-right {% if tx.type == 'income' %}amount-income{% else %}amount-expense{% endif %}">
-                    {% if tx.type == 'income' %}+{% else %}-{% endif %}${{ tx.amount|floatformat:2 }}
+                    {% if tx.type == 'income' %}+{% else %}-{% endif %}Ksh{{ tx.amount|floatformat:2 }}
                 </td>
             </tr>
             {% endfor %}

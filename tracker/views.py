@@ -49,8 +49,7 @@ def _tx_to_dict(tx):
 
 @login_required
 def dashboard(request):
-    """Phase 1/3 dashboard: styled after the reference design, backed by real
-    queries against the models. Every query is limited to the logged-in user."""
+   
     user_tx = Transaction.objects.filter(user=request.user)
     today = timezone.localdate()
     yesterday = today - timedelta(days=1)
