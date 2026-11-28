@@ -10,7 +10,7 @@ class AddTransactionTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("vero", password="pass12345!")
         self.client.force_login(self.user)
-        self.cat = Category.objects.create(name="Groceries")
+        self.cat = Category.objects.get_or_create(name="Groceries")[0]
         self.url = reverse("tracker:add_transaction")
 
     def post(self, **overrides):
@@ -42,7 +42,7 @@ class ListEditDeleteTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("vero", password="pass12345!")
         self.client.force_login(self.user)
-        self.cat = Category.objects.create(name="Rent")
+        self.cat = Category.objects.get_or_create(name="Rent")[0]
         self.tx = Transaction.objects.create(user=self.user, category=self.cat, type="expense", amount=100, date="2026-11-01")
 
     def test_list_shows_transaction(self):
@@ -75,14 +75,14 @@ class BudgetCrudTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("vero", password="pass12345!")
         self.client.force_login(self.user)
-        self.cat = Category.objects.create(name="Food")
+        self.cat = Category.objects.get_or_create(name="Food")[0]
         self.budget = Budget.objects.create(user=self.user, category=self.cat, monthly_limit=500)
 
     def test_list_shows_budget(self):
         self.assertContains(self.client.get(reverse("tracker:budget_list")), "Food")
 
     def test_add_budget(self):
-        other = Category.objects.create(name="Fun")
+        other = Category.objects.get_or_create(name="Fun")[0]
         r = self.client.post(reverse("tracker:add_budget"), {"category": other.id, "monthly_limit": "80"})
         self.assertRedirects(r, reverse("tracker:budget_list"))
         self.assertEqual(Budget.objects.count(), 2)
@@ -163,7 +163,7 @@ class DataIsolationTests(TestCase):
     def setUp(self):
         self.a = User.objects.create_user("alice", password="pass12345!")
         self.b = User.objects.create_user("bob", password="pass12345!")
-        self.cat = Category.objects.create(name="Food")
+        self.cat = Category.objects.get_or_create(name="Food")[0]
         self.a_tx = Transaction.objects.create(user=self.a, category=self.cat, amount=111, description="alice-secret")
         self.a_budget = Budget.objects.create(user=self.a, category=self.cat, monthly_limit=900)
         self.client.force_login(self.b)
@@ -214,9 +214,24 @@ class DataIsolationTests(TestCase):
 class ClaimOrphansTests(TestCase):
     def test_orphans_are_assigned(self):
         user = User.objects.create_user("vero", password="pass12345!")
-        cat = Category.objects.create(name="Food")
+        cat = Category.objects.get_or_create(name="Food")[0]
         Transaction.objects.create(category=cat, amount=5)
         Budget.objects.create(category=cat, monthly_limit=50)
         call_command("claim_orphans", "vero")
         self.assertEqual(Transaction.objects.filter(user=user).count(), 1)
         self.assertEqual(Budget.objects.filter(user=user).count(), 1)
+
+
+class DefaultCategoriesTests(TestCase):
+    """A brand-new database must already have categories to pick from."""
+
+    def test_defaults_exist_after_migrate(self):
+        names = set(Category.objects.values_list("name", flat=True))
+        for expected in ["Groceries", "Rent", "Transport", "Salary", "Airtime & Data", "Other"]:
+            self.assertIn(expected, names)
+
+    def test_add_form_offers_categories(self):
+        self.client.force_login(User.objects.create_user("vero", password="pass12345!"))
+        r = self.client.get(reverse("tracker:add_transaction"))
+        self.assertContains(r, "Groceries")
+        self.assertContains(r, "Airtime &amp; Data")
